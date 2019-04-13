@@ -3,12 +3,14 @@
 #include <string.h>
 #include <System/System.h>
 #include <System/Scheduler.h>
+#include <iostream>
 
 #include "canlight.h"
 #include "adc.h"
 #include "pin_mux.h"
 #include "clock_config.h"
-
+#include "eCarCanSettings.h"
+ 
 using namespace BSP;
 
 /*number of clock ticks per trigger of tick handlet*/
@@ -30,28 +32,28 @@ void collectAndTx(ADC_Type *base, uint32_t ch, int id){
    BSP::adc::ADC& st_adc = adc::ADC::StaticClass();
 
    /*put data in frame*/
-   uint32_t pin_data = st_adc.read(base,ch);
+   uint32_t pin_data = st_adc.read(base, ch);
    BSP::can::CANlight::frame f;
 
+   //moving data to the frame
    f.id = id;
    memcpy(((f.data)), (&pin_data), 1);
-   memcpy(((f.data)+1), (&pin_data)+1, 1);
-   memcpy(((f.data)+2), (&pin_data)+2, 1);
+   uint32_t pin_data_shifted = pin_data>>8;
+   memcpy(((f.data)+1), (&pin_data_shifted), 1);
 
    /*write tx out*/
    BSP::can::CANlight& can = can::CANlight::StaticClass();
 
    can.tx(0, f);
 
+   //reading in test
    BSP::can::CANlight::frame f2 = can.readrx(1);
    uint8_t pin_data3 = (f2.data)[0];
    uint8_t pin_data4 = (f2.data)[1];
    uint8_t pin_data5 = (f2.data)[2];
    uint8_t pin_data6 = (f2.data)[3];
    uint8_t pin_data7 = (f2.data)[4];
-   uint8_t pin_data8 = f2.data[5];
-   uint8_t pin_data9 = f2.data[6];
-   uint8_t pin_data10 = f2.data[7];
+   
 
 }
 
@@ -63,20 +65,45 @@ void SysTick_Handler(void) {
 }
 
 /*Tasks for each sesnor*/
-/*Pin 0*/
+//Pin 0
 static void Task0() {
-   collectAndTx(ADC2,13, 666);
+   collectAndTx(ADC_BASE0, ADC_CH0, CAN_ID0);
 }
 
-/*Pin 1
+//Pin 1
 static void Task1() {
-   collectAndTx(AD..,channel, 666);
+   collectAndTx(ADC_BASE1, ADC_CH1, CAN_ID1);
 }
 
-in 2
+//Pin 2
 static void Task2() {
-   collectAndTx(AD.., channel, 666);
-}*/
+   collectAndTx(ADC_BASE2, ADC_CH2, CAN_ID2);
+}
+
+//Pin 3
+static void Task3() {
+   collectAndTx(ADC_BASE3, ADC_CH3, CAN_ID3);
+}
+
+//Pin 4
+static void Task4() {
+   collectAndTx(ADC_BASE4, ADC_CH4, CAN_ID4);
+}
+
+//Pin 5
+static void Task5() {
+   collectAndTx(ADC_BASE5, ADC_CH5, CAN_ID5);
+}
+
+//Pin 6
+static void Task6() {
+   collectAndTx(ADC_BASE6, ADC_CH6, CAN_ID6);
+}
+
+//Pin 7
+static void Task7() {
+   collectAndTx(ADC_BASE7, ADC_CH7, CAN_ID7);
+}
 
 /*main loop*/
 int main(){
@@ -105,9 +132,30 @@ int main(){
 
    /*Adding all sensor tasks --- adress of func -- id of test -- number of ticks betwween executions
    --- deadline */
-   a.addTask(System::TaskPeriodic(Task0, 1, 4, 100));
-   //a.addTask(System::TaskPeriodic(Task1, 2, 4, 20));
-   //a.addTask(System::TaskPeriodic(Task2, 3, 4, 20));
+   if(ADC_ON0 == 1){
+      a.addTask(System::TaskPeriodic(Task0, 1, ADC_TBE0, ADC_DEAD0));
+   }
+   if(ADC_ON1 == 1){
+      a.addTask(System::TaskPeriodic(Task1, 2, ADC_TBE1, ADC_DEAD1));
+   }
+   if(ADC_ON2 == 1){
+      a.addTask(System::TaskPeriodic(Task2, 3, ADC_TBE2, ADC_DEAD2));
+   }
+   if(ADC_ON3 == 1){
+      a.addTask(System::TaskPeriodic(Task3, 4, ADC_TBE3, ADC_DEAD3));
+   }
+   if(ADC_ON4 == 1){
+      a.addTask(System::TaskPeriodic(Task4, 5, ADC_TBE4, ADC_DEAD4));
+   }
+   if(ADC_ON5 == 1){
+      a.addTask(System::TaskPeriodic(Task5, 6, ADC_TBE5, ADC_DEAD5));
+   }
+   if(ADC_ON6 == 1){
+      a.addTask(System::TaskPeriodic(Task6, 7, ADC_TBE6, ADC_DEAD6));
+   }
+   if(ADC_ON7 == 1){
+      a.addTask(System::TaskPeriodic(Task7, 8, ADC_TBE7, ADC_DEAD7));
+   }
 
    a.start();
 
