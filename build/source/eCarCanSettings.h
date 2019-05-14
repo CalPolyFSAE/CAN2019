@@ -5,7 +5,7 @@
 
 //adc0
 #define ADC_ON0 1 //If a sensor is connected to that pin
-#define ADC_BASE0 ADC2 // the actual pin
+#define ADC_BASE0 ADC1 // the actual pin
 #define ADC_CH0 13 // pin channel?
 #define CAN_ID0 666 // Bus id
 #define ADC_TBE0 4 // Time between execution

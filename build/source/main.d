@@ -22,7 +22,8 @@ build/source/main.o: build/source/main.cpp \
  /Users/baylorwhitehead/Documents/GitHub/MKELibrary/board/pin_mux.h \
  /Users/baylorwhitehead/Documents/GitHub/MKELibrary/board/clock_config.h \
  /Users/baylorwhitehead/Documents/GitHub/MKELibrary/drivers/fsl_common.h \
- build/source/eCarCanSettings.h
+ build/source/eCarCanSettings.h \
+ /Users/baylorwhitehead/Documents/GitHub/MKELibrary/CMSIS/MKE18F16.h
 
 /Users/baylorwhitehead/Documents/GitHub/MKELibrary/System/System.h:
 
@@ -71,3 +72,5 @@ build/source/main.o: build/source/main.cpp \
 /Users/baylorwhitehead/Documents/GitHub/MKELibrary/drivers/fsl_common.h:
 
 build/source/eCarCanSettings.h:
+
+/Users/baylorwhitehead/Documents/GitHub/MKELibrary/CMSIS/MKE18F16.h:

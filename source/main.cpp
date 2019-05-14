@@ -10,6 +10,9 @@
 #include "pin_mux.h"
 #include "clock_config.h"
 #include "eCarCanSettings.h"
+
+#include "MKE18F16.h"
+
  
 using namespace BSP;
 
@@ -26,7 +29,7 @@ static scheduler a;
 void collectAndTx(ADC_Type *base, uint32_t ch, int id){
 
    /*input tests*/
-   assert(base>=0);
+   //assert(base>=0);
 
    /*get adc*/
    BSP::adc::ADC& st_adc = adc::ADC::StaticClass();
@@ -35,8 +38,20 @@ void collectAndTx(ADC_Type *base, uint32_t ch, int id){
    uint32_t pin_data = st_adc.read(base, ch);
    BSP::can::CANlight::frame f;
 
+   uint32_t pin_data6 = st_adc.read(ADC0, 6);
+   uint32_t pin_data7 = st_adc.read(ADC0, 7);
+   uint32_t pin_data8 = st_adc.read(ADC0, 8);
+   uint32_t pin_data9 = st_adc.read(ADC0, 9);
+   uint32_t pin_data10 = st_adc.read(ADC0, 10);
+   uint32_t pin_data11 = st_adc.read(ADC0, 11);
+   uint32_t pin_data12 = st_adc.read(ADC0, 12);
+   uint32_t pin_data13 = st_adc.read(ADC0, 13);
+   uint32_t pin_data14 = st_adc.read(ADC0, 14);
+   uint32_t pin_data15 = st_adc.read(ADC0, 15);
+
    //moving data to the frame
    f.id = id;
+   printf("%p", f.data);
    memcpy(((f.data)), (&pin_data), 1);
    uint32_t pin_data_shifted = pin_data>>8;
    memcpy(((f.data)+1), (&pin_data_shifted), 1);
@@ -48,11 +63,11 @@ void collectAndTx(ADC_Type *base, uint32_t ch, int id){
 
    //reading in test
    BSP::can::CANlight::frame f2 = can.readrx(1);
-   uint8_t pin_data3 = (f2.data)[0];
-   uint8_t pin_data4 = (f2.data)[1];
-   uint8_t pin_data5 = (f2.data)[2];
-   uint8_t pin_data6 = (f2.data)[3];
-   uint8_t pin_data7 = (f2.data)[4];
+   uint8_t pin_data3a = (f2.data)[0];
+   uint8_t pin_data4a = (f2.data)[1];
+   uint8_t pin_data5a = (f2.data)[2];
+   uint8_t pin_data6a = (f2.data)[3];
+   uint8_t pin_data7a = (f2.data)[4];
    
 
 }
@@ -112,6 +127,7 @@ int main(){
 
    /*create canlight_config*/
    BSP::can::canlight_config cl_config;
+   
    /*CANlight::CANlight(cl_config)*/
 
    /*create canxconfig*/
@@ -124,8 +140,13 @@ int main(){
    can.init(0, &cx_config);
    can.init(1, &cx_config);
 
+   // if(BSP::adc::ADC::calibrate(ADC0) != kStatus_Success){
+   //    perror(NULL);
+   // }
+
    /*adc setup*/   
    BSP::adc::ADC::ConstructStatic(NULL);
+
 
    /*initalize interupt that adds to counter*/
    SysTick_Config(SYSTICK);

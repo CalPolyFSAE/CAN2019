@@ -17,6 +17,7 @@ processor_version: 5.0.0
 /* clang-format on */
 
 #include "fsl_common.h"
+#include "fsl_port.h"
 #include "pin_mux.h"
 
 /* FUNCTION ************************************************************************************************************
@@ -35,7 +36,21 @@ void BOARD_InitBootPins(void)
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 BOARD_InitPins:
 - options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
-- pin_list: []
+- pin_list:
+  - {pin_num: '32', peripheral: ADC0, signal: 'SE, 6', pin_signal: ADC0_SE6/PTB2/FTM1_CH0/LPSPI0_SCK/FTM1_QD_PHB/TRGMUX_IN3}
+  - {pin_num: '31', peripheral: ADC0, signal: 'SE, 7', pin_signal: ADC0_SE7/PTB3/FTM1_CH1/LPSPI0_SIN/FTM1_QD_PHA/TRGMUX_IN2}
+  - {pin_num: '30', peripheral: ADC0, signal: 'SE, 12', pin_signal: ADC0_SE12/ACMP2_IN5/PTC14/FTM1_CH2}
+  - {pin_num: '29', peripheral: ADC0, signal: 'SE, 13', pin_signal: ADC0_SE13/ACMP2_IN4/PTC15/FTM1_CH3}
+  - {pin_num: '28', peripheral: ADC0, signal: 'SE, 14', pin_signal: ADC0_SE14/PTC16/FTM1_FLT2/LPI2C1_SDAS}
+  - {pin_num: '27', peripheral: ADC0, signal: 'SE, 15', pin_signal: ADC0_SE15/PTC17/FTM1_FLT3/LPI2C1_SCLS}
+  - {pin_num: '26', peripheral: ADC0, signal: 'SE, 8', pin_signal: ADC0_SE8/ACMP1_IN4/PTC0/FTM0_CH0/FTM1_CH6}
+  - {pin_num: '25', peripheral: ADC0, signal: 'SE, 9', pin_signal: ADC0_SE9/ACMP1_IN3/PTC1/FTM0_CH1/FTM1_CH7}
+  - {pin_num: '21', peripheral: ADC0, signal: 'SE, 10', pin_signal: ADC0_SE10/ACMP0_IN5/XTAL32/PTC2/FTM0_CH2/CAN0_RX}
+  - {pin_num: '20', peripheral: ADC0, signal: 'SE, 11', pin_signal: ADC0_SE11/ACMP0_IN4/EXTAL32/PTC3/FTM0_CH3/CAN0_TX}
+  - {pin_num: '5', peripheral: CAN0, signal: TX, pin_signal: PTE5/TCLK2/FTM2_QD_PHA/FTM2_CH3/CAN0_TX/FXIO_D7/EWM_IN}
+  - {pin_num: '6', peripheral: CAN0, signal: RX, pin_signal: PTE4/BUSOUT/FTM2_QD_PHB/FTM2_CH2/CAN0_RX/FXIO_D6/EWM_OUT_b}
+  - {pin_num: '48', peripheral: LPUART0, signal: RX, pin_signal: ADC1_SE0/PTA2/FTM3_CH0/LPI2C0_SDA/EWM_OUT_b/LPUART0_RX}
+  - {pin_num: '47', peripheral: LPUART0, signal: TX, pin_signal: ADC1_SE1/PTA3/FTM3_CH1/LPI2C0_SCL/EWM_IN/LPUART0_TX}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -48,6 +63,56 @@ BOARD_InitPins:
  * END ****************************************************************************************************************/
 void BOARD_InitPins(void)
 {
+    /* Clock Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortA);
+    /* Clock Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortB);
+    /* Clock Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortC);
+    /* Clock Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortE);
+
+    /* PORTA2 (pin 48) is configured as LPUART0_RX */
+    PORT_SetPinMux(PORTA, 2U, kPORT_MuxAlt6);
+
+    /* PORTA3 (pin 47) is configured as LPUART0_TX */
+    PORT_SetPinMux(PORTA, 3U, kPORT_MuxAlt6);
+
+    /* PORTB2 (pin 32) is configured as ADC0_SE6 */
+    PORT_SetPinMux(PORTB, 2U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTB3 (pin 31) is configured as ADC0_SE7 */
+    PORT_SetPinMux(PORTB, 3U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC0 (pin 26) is configured as ADC0_SE8 */
+    PORT_SetPinMux(PORTC, 0U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC1 (pin 25) is configured as ADC0_SE9 */
+    PORT_SetPinMux(PORTC, 1U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC14 (pin 30) is configured as ADC0_SE12 */
+    PORT_SetPinMux(PORTC, 14U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC15 (pin 29) is configured as ADC0_SE13 */
+    PORT_SetPinMux(PORTC, 15U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC16 (pin 28) is configured as ADC0_SE14 */
+    PORT_SetPinMux(PORTC, 16U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC17 (pin 27) is configured as ADC0_SE15 */
+    PORT_SetPinMux(PORTC, 17U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC2 (pin 21) is configured as ADC0_SE10 */
+    PORT_SetPinMux(PORTC, 2U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC3 (pin 20) is configured as ADC0_SE11 */
+    PORT_SetPinMux(PORTC, 3U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTE4 (pin 6) is configured as CAN0_RX */
+    PORT_SetPinMux(PORTE, 4U, kPORT_MuxAlt5);
+
+    /* PORTE5 (pin 5) is configured as CAN0_TX */
+    PORT_SetPinMux(PORTE, 5U, kPORT_MuxAlt5);
 }
 /***********************************************************************************************************************
  * EOF
