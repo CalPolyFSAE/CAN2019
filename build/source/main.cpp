@@ -38,16 +38,16 @@ void collectAndTx(ADC_Type *base, uint32_t ch, int id){
    uint32_t pin_data = st_adc.read(base, ch);
    BSP::can::CANlight::frame f;
 
-   uint32_t pin_data6 = st_adc.read(ADC0, 6);
-   uint32_t pin_data7 = st_adc.read(ADC0, 7);
-   uint32_t pin_data8 = st_adc.read(ADC0, 8);
-   uint32_t pin_data9 = st_adc.read(ADC0, 9);
-   uint32_t pin_data10 = st_adc.read(ADC0, 10);
-   uint32_t pin_data11 = st_adc.read(ADC0, 11);
-   uint32_t pin_data12 = st_adc.read(ADC0, 12);
-   uint32_t pin_data13 = st_adc.read(ADC0, 13);
-   uint32_t pin_data14 = st_adc.read(ADC0, 14);
-   uint32_t pin_data15 = st_adc.read(ADC0, 15);
+   //uint32_t pin_data6 = st_adc.read(ADC0, 6);
+   //uint32_t pin_data7 = st_adc.read(ADC0, 7);
+   //uint32_t pin_data8 = st_adc.read(ADC0, 8);
+   //uint32_t pin_data9 = st_adc.read(ADC0, 9);
+   //uint32_t pin_data10 = st_adc.read(ADC0, 10);
+   //uint32_t pin_data11 = st_adc.read(ADC0, 11);
+   //uint32_t pin_data12 = st_adc.read(ADC0, 12);
+   //uint32_t pin_data13 = st_adc.read(ADC0, 13);
+   //uint32_t pin_data14 = st_adc.read(ADC0, 14);
+   //uint32_t pin_data15 = st_adc.read(ADC0, 15);
 
    //moving data to the frame
    f.id = id;
@@ -62,12 +62,12 @@ void collectAndTx(ADC_Type *base, uint32_t ch, int id){
    can.tx(0, f);
 
    //reading in test
-   BSP::can::CANlight::frame f2 = can.readrx(1);
-   uint8_t pin_data3a = (f2.data)[0];
-   uint8_t pin_data4a = (f2.data)[1];
-   uint8_t pin_data5a = (f2.data)[2];
-   uint8_t pin_data6a = (f2.data)[3];
-   uint8_t pin_data7a = (f2.data)[4];
+   //BSP::can::CANlight::frame f2 = can.readrx(1);
+   //uint8_t pin_data3a = (f2.data)[0];
+   //uint8_t pin_data4a = (f2.data)[1];
+   //uint8_t pin_data5a = (f2.data)[2];
+   //uint8_t pin_data6a = (f2.data)[3];
+   //uint8_t pin_data7a = (f2.data)[4];
    
 
 }
@@ -125,12 +125,19 @@ int main(){
    BOARD_InitBootPins();
    BOARD_InitBootClocks();
 
+  
+
+   /*initalize interupt that adds to counter*/
+   SysTick_Config(SYSTICK);
+
+   /*adc setup*/   
+  adc::ADC::ConstructStatic(NULL);
+
    /*create canlight_config*/
    BSP::can::canlight_config cl_config;
-   
-   /*CANlight::CANlight(cl_config)*/
 
    /*create canxconfig*/
+
    BSP::can::CANlight::canx_config cx_config;
    BSP::can::CANlight::ConstructStatic(&cl_config);
    BSP::can::CANlight& can = can::CANlight::StaticClass();
@@ -144,12 +151,10 @@ int main(){
    //    perror(NULL);
    // }
 
-   /*adc setup*/   
-   BSP::adc::ADC::ConstructStatic(NULL);
+   
 
 
-   /*initalize interupt that adds to counter*/
-   SysTick_Config(SYSTICK);
+  
 
    /*Adding all sensor tasks --- adress of func -- id of test -- number of ticks betwween executions
    --- deadline */

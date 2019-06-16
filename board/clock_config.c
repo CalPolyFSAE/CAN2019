@@ -279,3 +279,4 @@ void BOARD_BootClockRUN(void)
     /* Set PCC FTM3 selection */
     CLOCK_SetIpSrc(kCLOCK_Ftm3, kCLOCK_IpSrcFircAsync);
 }
+
